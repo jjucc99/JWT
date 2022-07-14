@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="TimeService">
+    <meta property="og:description" content="당신의 하루를 공유해보세요.">
+    <title>Timeline Service</title>
+
+    <link href="/css/style.css?after" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+<div class="background-header">
+    <div>
+        <a href="/user/loginView">로그인</a>
+    </div>
+    <form id="logout" action="/user/logout" method="POST">
+        <button>로그 아웃</button>
+    </form>
+</div>
+<div class="background-body">
+
+</div>
+<div class="wrap">
+    <div class="header">
+        <h2>Timeline Service</h2>
+        <p>
+            공유하고 싶은 소식을 입력해주세요.
+            하루가 지난 뒤에는 사라집니다.
+        </p>
+    </div>
+    <div class="area-write">
+        <textarea class="field" placeholder="공유하고 싶은 소식을 입력해주세요" name="contents" id="contents" cols="30"
+                  rows="10"></textarea>
+        <!--            <button class="btn btn-danger" onclick="writePost()">작성하기</button>-->
+        <img src="images/send.png" alt="" onclick="writePost()">
+    </div>
+    <div id="cards-box" class="area-read">
+        <div class="card">
+            <!-- date/username 영역 -->
+            <div class="metadata">
+                <div class="date">
+                    October 10, 2020
+                </div>
+                <div class="username">
+                    anonymous
+                </div>
+            </div>
+            <!-- contents 조회/수정 영역-->
+            <div class="contents">
+                <div id="1-contents" class="text">
+                </div>
+                <div id="1-editarea" class="edit">
+                    <textarea id="1-textarea" class="te-edit" name="" cols="30" rows="5"></textarea>
+                </div>
+            </div>
+            <!--여기는 코멘트 영역-->
+            <ul class=""></ul>
+            <!-- 버튼 영역-->
+            <div class="footer">
+                <img id="1-edit" class="icon-start-edit" src="images/edit.png" alt="" onclick="editPost('1')">
+                <img id="1-delete" class="icon-delete" src="images/delete.png" alt="" onclick="deleteOne('1')">
+                <img id="1-submit" class="icon-end-edit" src="images/done.png" alt="" onclick="submitEdit('1')">
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/js/basic.js"></script>
+</body>
+</html>
