@@ -8,6 +8,7 @@ import com.sparta.springcore.security.provider.JWTAuthProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -19,6 +20,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.ServletException;
@@ -74,10 +76,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .addFilterBefore(formLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+
         http.csrf().disable()
+
                 .authorizeRequests()
                 //요청을 오직 유저가 해야함
-                .antMatchers("/api/comment/**").access("hasRole('ROLE_USER')")
+                .antMatchers("/api/comment/**").authenticated()
                 // /about 요청에 대해서는 로그인을 요구함
 //                .antMatchers("/api/comment/**").authenticated()
                 // /admin 요청에 대해서는 ROLE_ADMIN 역할을 가지고 있어야 함
@@ -97,6 +101,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     @Override
                     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
                         response.sendError(HttpStatus.UNAUTHORIZED.value(), "로그인이 필요합니다.");
+                    }
+
+                }).accessDeniedHandler(new AccessDeniedHandler() {
+                    @Override
+                    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+                        response.sendError(HttpStatus.FORBIDDEN.value(), "로그인이 필요합니다.");
                     }
                 });
     }
@@ -125,7 +135,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         List<String> skipPathList = new ArrayList<>();
 
         // Static 정보 접근 허용
-        skipPathList.add("GET,/**");
+//        skipPathList.add("GET,/");
         skipPathList.add("GET,/images/**");
         skipPathList.add("GET,/css/**");
         skipPathList.add("GET,/js/basic.js");

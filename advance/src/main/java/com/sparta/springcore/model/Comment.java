@@ -22,7 +22,7 @@ public class Comment extends Timestamped {
 
     @JsonManagedReference // 순환참조 방지
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMO_ID")
+   @JoinColumn(name = "MEMO_ID")
     private Memo memo;
 
     public Comment(CommentDto commentDto) {
